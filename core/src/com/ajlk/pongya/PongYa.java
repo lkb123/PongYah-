@@ -5,10 +5,12 @@ import com.ajlk.pongya.screens.Splash;
 import com.badlogic.gdx.Game;
 
 
+
 public class PongYa extends Game {
 
 	@Override
 	public void create() {
+
 		setScreen(new Splash());
 		
 	}

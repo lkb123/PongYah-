@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class MainMenu implements Screen {
 	
@@ -26,22 +27,23 @@ public class MainMenu implements Screen {
 	private Table table;
 	private TextButton buttonExit, buttonPlay;
 	private BitmapFont white,black;
-	private Label heading;
+	//private Label heading;
 
 	@Override
 	public void show() {
-		stage = new Stage();
+		stage = new Stage(new FitViewport(1280, 720));
 
 		Gdx.input.setInputProcessor(stage);
 		
 		atlas = new TextureAtlas("ui/button.pack");
 		skin = new Skin(atlas);
+		
 		Texture headingTexture =  new Texture("ui/heading.png");
 		Image headingImage = new Image(headingTexture);
 		headingImage.scaleBy(0, 0);
 
 		table = new Table(skin);
-		table.setBounds(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		table.setBounds(0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
 		
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
@@ -65,9 +67,9 @@ public class MainMenu implements Screen {
 		buttonExit.pad(20);
 		
 		//creating heading
-		LabelStyle headingStyle = new LabelStyle(white, Color.WHITE);
-		heading = new Label("PongYah!", headingStyle);
-
+		//LabelStyle headingStyle = new LabelStyle(white, Color.WHITE);
+		//heading = new Label("PongYah!", headingStyle);
+		
 		table.add(headingImage);
 		table.row();
 		table.add(buttonExit);
@@ -79,13 +81,14 @@ public class MainMenu implements Screen {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		stage.act(delta);		
+		table.setDebug(true);
+		
+		stage.act(delta);
 		stage.draw();
 	}
 
 	@Override
 	public void resize(int width, int height) {
-
 	}
 
 	@Override
