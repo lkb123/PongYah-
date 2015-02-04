@@ -10,7 +10,6 @@ public class PongYa extends Game {
 
 	@Override
 	public void create() {
-
 		setScreen(new Splash());
 		
 	}

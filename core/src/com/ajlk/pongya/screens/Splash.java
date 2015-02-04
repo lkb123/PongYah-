@@ -10,6 +10,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,16 +20,23 @@ public class Splash implements Screen{
 	private SpriteBatch batch;
 	private Sprite splash;
 	private TweenManager tweenManager;
+	private OrthographicCamera camera;
+	private Texture splashTexture;
 
 	@Override
 	public void show() {
+		camera = new OrthographicCamera();
+	    camera.setToOrtho(false, 1280, 720);
+		
+		
 		batch = new SpriteBatch();
 		tweenManager = new TweenManager();
 		Tween.registerAccessor(Sprite.class, new SpriteAccessor());
 		
-		Texture splashTexture=  new Texture("images/ajlkTransparent.png");
+		splashTexture =  new Texture("images/ajlkTransparent.png");
 		splash = new Sprite(splashTexture);
-		splash.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+		splash.setBounds( 0, 0, camera.viewportWidth, camera.viewportHeight);
+		
 		
 		Tween.set(splash, SpriteAccessor.ALPHA).target(0).start(tweenManager);
 		Tween.to(splash, SpriteAccessor.ALPHA, 2).target(1).repeatYoyo(1, (float) 0.5).setCallback(goToMainMenu).start(tweenManager);
@@ -42,6 +50,7 @@ public class Splash implements Screen{
 		
 		tweenManager.update(delta);
 		
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		splash.draw(batch);
 		batch.end();
