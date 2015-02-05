@@ -2,6 +2,7 @@ package com.ajlk.pongya.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -74,7 +75,7 @@ public class MainMenu implements Screen {
 		buttonPlay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new gameScreen());
+				((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
 			}
 		});
 		buttonPlay.pad(20);
@@ -83,7 +84,7 @@ public class MainMenu implements Screen {
 		buttonAchievement.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new gameScreen());
+				((Game)Gdx.app.getApplicationListener()).setScreen(new AchievementScreen());
 			}
 		});
 		buttonAchievement.pad(20);
@@ -92,7 +93,7 @@ public class MainMenu implements Screen {
 		buttonCredits.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new gameScreen());
+				((Game)Gdx.app.getApplicationListener()).setScreen(new CreditsScreen());
 			}
 		});
 		buttonCredits.pad(20);
@@ -115,6 +116,8 @@ public class MainMenu implements Screen {
 		table.row();
 		table.add(buttonExit).minWidth(250);
 		stage.addActor(table);
+		
+		Gdx.input.setCatchBackKey(true);
 	}
 
 	@Override
@@ -126,6 +129,10 @@ public class MainMenu implements Screen {
 		
 		stage.act(delta);
 		stage.draw();
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+			Gdx.app.exit();
+		}
 	}
 
 	@Override
