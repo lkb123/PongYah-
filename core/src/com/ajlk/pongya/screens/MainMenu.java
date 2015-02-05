@@ -1,5 +1,6 @@
 package com.ajlk.pongya.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -25,8 +26,10 @@ public class MainMenu implements Screen {
 	private TextureAtlas atlas;
 	private Skin skin;
 	private Table table;
-	private TextButton buttonExit, buttonPlay;
+	private TextButton buttonExit, buttonPlay, buttonAchievement, buttonCredits;
 	private BitmapFont white,black;
+	private Texture headingTexture;
+	private Image headingImage;
 	//private Label heading;
 
 	@Override
@@ -38,9 +41,9 @@ public class MainMenu implements Screen {
 		atlas = new TextureAtlas("ui/button.pack");
 		skin = new Skin(atlas);
 		
-		Texture headingTexture =  new Texture("ui/heading.png");
-		Image headingImage = new Image(headingTexture);
-		headingImage.scaleBy(0, 0);
+		headingTexture =  new Texture("ui/heading.png");
+		headingImage = new Image(headingTexture);
+
 
 		table = new Table(skin);
 		table.setBounds(0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
@@ -66,13 +69,51 @@ public class MainMenu implements Screen {
 		});
 		buttonExit.pad(20);
 		
+		
+		buttonPlay = new TextButton("Play", textButtonStyle);
+		buttonPlay.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				((Game)Gdx.app.getApplicationListener()).setScreen(new gameScreen());
+			}
+		});
+		buttonPlay.pad(20);
+		
+		buttonAchievement = new TextButton("Achievement", textButtonStyle);
+		buttonAchievement.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				((Game)Gdx.app.getApplicationListener()).setScreen(new gameScreen());
+			}
+		});
+		buttonAchievement.pad(20);
+		
+		buttonCredits = new TextButton("Credits", textButtonStyle);
+		buttonCredits.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				((Game)Gdx.app.getApplicationListener()).setScreen(new gameScreen());
+			}
+		});
+		buttonCredits.pad(20);
+		
+		
+		
+		
+		
 		//creating heading
 		//LabelStyle headingStyle = new LabelStyle(white, Color.WHITE);
 		//heading = new Label("PongYah!", headingStyle);
 		
-		table.add(headingImage);
+		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
 		table.row();
-		table.add(buttonExit);
+		table.add(buttonPlay).spaceBottom(20).minWidth(250);
+		table.row();
+		table.add(buttonAchievement).expandX().spaceBottom(20).minWidth(250);
+		table.row();
+		table.add(buttonCredits).expandX().spaceBottom(20).minWidth(250);
+		table.row();
+		table.add(buttonExit).minWidth(250);
 		stage.addActor(table);
 	}
 
@@ -81,7 +122,7 @@ public class MainMenu implements Screen {
 		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		table.setDebug(true);
+		//table.setDebug(true);
 		
 		stage.act(delta);
 		stage.draw();
@@ -109,7 +150,10 @@ public class MainMenu implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-
+		atlas.dispose();
+		skin.dispose();
+		white.dispose();
+		black.dispose();
 	}
 
 }
