@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,8 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -31,7 +28,6 @@ public class MainMenu implements Screen {
 	private BitmapFont white,black;
 	private Texture headingTexture;
 	private Image headingImage;
-	//private Label heading;
 
 	@Override
 	public void show() {
@@ -98,14 +94,6 @@ public class MainMenu implements Screen {
 		});
 		buttonCredits.pad(20);
 		
-		
-		
-		
-		
-		//creating heading
-		//LabelStyle headingStyle = new LabelStyle(white, Color.WHITE);
-		//heading = new Label("PongYah!", headingStyle);
-		
 		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
 		table.row();
 		table.add(buttonPlay).spaceBottom(20).minWidth(250);
@@ -129,10 +117,6 @@ public class MainMenu implements Screen {
 		
 		stage.act(delta);
 		stage.draw();
-		
-		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-			Gdx.app.exit();
-		}
 	}
 
 	@Override
