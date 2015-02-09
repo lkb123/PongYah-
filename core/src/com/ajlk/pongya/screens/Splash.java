@@ -26,7 +26,7 @@ public class Splash implements Screen{
 	@Override
 	public void show() {
 		camera = new OrthographicCamera();
-	    camera.setToOrtho(false, 1280, 720);
+	    camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		
 		
 		batch = new SpriteBatch();
