@@ -57,7 +57,7 @@ public class Splash implements Screen{
 	}
 
 	@Override
-	public void resize(int width, int height) {	
+	public void resize(int width, int height) {
 	}
 
 	@Override
@@ -70,8 +70,7 @@ public class Splash implements Screen{
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
-		
+		this.dispose();
 	}
 
 	@Override

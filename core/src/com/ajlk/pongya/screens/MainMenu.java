@@ -30,9 +30,10 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void show() {
-		stage = new Stage(new FitViewport(Gdx.graphics.getWidth(),Gdx.graphics.getHeight()));
+		stage = new Stage(new FitViewport(1280, 720));
 
 		Gdx.input.setInputProcessor(stage);
+		Gdx.input.setCatchBackKey(true);
 		
 		atlas = new TextureAtlas("ui/button.pack");
 		skin = new Skin(atlas);
@@ -42,7 +43,7 @@ public class MainMenu implements Screen {
 
 
 		table = new Table(skin);
-		table.setBounds(0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
+		table.setBounds(0, 0, stage.getWidth(), stage.getHeight());
 		
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
@@ -104,7 +105,8 @@ public class MainMenu implements Screen {
 		table.add(buttonExit).minWidth(250);
 		stage.addActor(table);
 		
-		Gdx.input.setCatchBackKey(true);
+		
+		
 	}
 
 	@Override
@@ -120,7 +122,6 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
@@ -135,7 +136,7 @@ public class MainMenu implements Screen {
 
 	@Override
 	public void hide() {
-
+		this.dispose();
 	}
 
 	@Override

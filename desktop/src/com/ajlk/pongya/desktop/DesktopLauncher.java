@@ -10,8 +10,8 @@ public class DesktopLauncher {
 		
 		config.title = "Pongya";
 		config.vSyncEnabled = true;
-		config.width = 960;
-		config.height = 640;
+		config.width = 480;
+		config.height = 320;
 		
 		new LwjglApplication(new PongYa(), config);
 	}
