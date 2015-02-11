@@ -11,38 +11,63 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 
-public class GameScreen implements Screen,InputProcessor {
-	SpriteBatch batch;
-	Sprite background;
-	OrthographicCamera camera;
+public class GameScreen implements Screen,InputProcessor, GestureDetector.GestureListener {
+	SpriteBatch batch = new SpriteBatch();
+	OrthographicCamera camera = new OrthographicCamera();;
+	GestureDetector gestureDetector;
+	BitmapFont.TextBounds bounds;
+	String score;
+	
 	final float PONG_WORLD_WIDTH = 1024;
 	final float PONG_WORLD_HEIGHT = 768;
 	
-	Viewport viewport;
+	Viewport viewport = new FitViewport(PONG_WORLD_WIDTH, PONG_WORLD_HEIGHT,camera);
+	
+	Sprite background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
+	Sprite ball = new Sprite(new Texture(Gdx.files.internal("ui/ball.png")));
+	Sprite playerPaddle = new Sprite(new Texture(Gdx.files.internal("ui/paddleRight.png")));
+	Sprite aiPaddle = new Sprite(new Texture(Gdx.files.internal("ui/paddleLeft.png")));
+	
+	float playerPaddleHeight = viewport.getWorldHeight()/4;
+	float aiPaddleHeight = viewport.getWorldHeight()/4;
+	float ballDiameter = ball.getHeight();
+	
+	BitmapFont white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
+	
 	
 	@Override
 	public void show() {
-		batch = new SpriteBatch();
-		background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
-		background.setSize(PONG_WORLD_WIDTH, PONG_WORLD_HEIGHT);
-		
-		camera = new OrthographicCamera();
-		viewport = new StretchViewport(PONG_WORLD_WIDTH, PONG_WORLD_HEIGHT,camera);
 		viewport.apply();
-		camera.position.set(PONG_WORLD_WIDTH/2,PONG_WORLD_HEIGHT/2,0);
+		camera.position.set(PONG_WORLD_WIDTH/2-ballDiameter/2,PONG_WORLD_HEIGHT/2-ballDiameter/2,0);
 		
-		Gdx.input.setInputProcessor(this);
+		background.setSize(PONG_WORLD_WIDTH, PONG_WORLD_HEIGHT);
+		ball.setBounds(PONG_WORLD_WIDTH/2, PONG_WORLD_HEIGHT/2, viewport.getWorldWidth()/20, viewport.getWorldWidth()/20);
+		playerPaddle.setBounds(PONG_WORLD_WIDTH-playerPaddle.getWidth()-10, 
+				PONG_WORLD_HEIGHT/2 - playerPaddleHeight/2,
+				playerPaddle.getWidth(), playerPaddleHeight);
+		
+		aiPaddle.setBounds(10, PONG_WORLD_HEIGHT/2 - aiPaddleHeight/2, 
+				aiPaddle.getWidth(),aiPaddleHeight);
+		
+		score = "100";
+		bounds = white.getBounds(score);
+		white.scale(1.5f);
+		
+		gestureDetector = new GestureDetector(this);
+		Gdx.input.setInputProcessor(gestureDetector);
 	}
 
 	@Override
 	public void render(float delta) {
+		camera.update();
+		
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
 			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 		}
@@ -50,14 +75,18 @@ public class GameScreen implements Screen,InputProcessor {
 		Gdx.gl.glClearColor(1,0,0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		camera.update();
+		
 		
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
 		background.draw(batch);
+		ball.draw(batch);
+		playerPaddle.draw(batch);
+		aiPaddle.draw(batch);
+		white.draw(batch, score, 
+				viewport.getWorldWidth()/2 - (bounds.width /2), 
+				viewport.getWorldHeight() - bounds.height);
 		batch.end();
-		
-		
 	}
 
 	@Override
@@ -142,6 +171,65 @@ public class GameScreen implements Screen,InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean touchDown(float x, float y, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean tap(float x, float y, int count, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean longPress(float x, float y) {
+		float alpha = background.getColor().a;
+		
+		if(alpha>=0.f)
+			background.setAlpha(alpha-0.25f);
+		else
+			background.setAlpha(1f);
+		
+		return true;
+	}
+
+	@Override
+	public boolean fling(float velocityX, float velocityY, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		Vector3 touchPos = new Vector3(x,y,0);
+		camera.unproject(touchPos);
+		
+		camera.translate(touchPos.x, touchPos.y);
+		
+		return true;
+	}
+
+	@Override
+	public boolean panStop(float x, float y, int pointer, int button) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean zoom(float initialDistance, float distance) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
+			Vector2 pointer1, Vector2 pointer2) {
 		// TODO Auto-generated method stub
 		return false;
 	}
