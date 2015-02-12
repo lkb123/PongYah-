@@ -11,9 +11,11 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -29,6 +31,8 @@ public class AchievementScreen implements Screen {
 	BitmapFont white;
 	BitmapFont black;
 	Image fbImg, twitterImg;
+	Label highScore;
+	TextField highScoreText;
 	
 	@Override
 	public void show() {
@@ -52,6 +56,9 @@ public class AchievementScreen implements Screen {
 		
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
+		
+		//highScore = new Label("High Score", skin);
+		//highScoreText = new TextField("0", skin);
 		
 		//creating buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -78,6 +85,9 @@ public class AchievementScreen implements Screen {
 			
 		});
 		
+		//table.add(highScore);
+	    //table.add(highScoreText).width(100);
+	    //table.row();
 		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
 		table.row();
 		table.add(fbImg).spaceBottom(20).minWidth(250);

@@ -12,7 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class CreditsScreen implements Screen {
 	
@@ -23,11 +25,11 @@ public class CreditsScreen implements Screen {
 	private BitmapFont white,black;
 	private Texture headingTexture;
 	private Image headingImage;
-	
+	private TextButton jalil, kert, developers;
 	
 	@Override
 	public void show() {
-		stage = new Stage();
+		stage = new Stage(new FitViewport(1280, 720));
 		Gdx.input.setInputProcessor(stage);
 		
 		atlas = new TextureAtlas("ui/button.pack");
@@ -41,7 +43,8 @@ public class CreditsScreen implements Screen {
 		table.setBounds(0, 0, stage.getViewport().getWorldWidth(), stage.getViewport().getWorldHeight());
 		
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
-		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
+		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);
+		
 		
 		//creating buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -51,7 +54,18 @@ public class CreditsScreen implements Screen {
 		textButtonStyle.pressedOffsetY = -1;
 		textButtonStyle.font = black;
 		
+
+		developers = new TextButton("DEVELOPERS", textButtonStyle);
+		jalil = new TextButton("Abdul Jalil Laguindab", textButtonStyle);
+		kert = new TextButton("Louie Kert Basay", textButtonStyle);
+		
 		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
+		table.row();
+		table.add(developers).spaceBottom(20).minWidth(250);
+		table.row();
+		table.add(jalil).spaceBottom(20).minWidth(250);
+		table.row();
+		table.add(kert).spaceBottom(20).minWidth(250);
 		table.row();
 		stage.addActor(table);
 		Gdx.input.setCatchBackKey(true);
@@ -59,7 +73,7 @@ public class CreditsScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glClearColor(1,0,0,1);
+		Gdx.gl.glClearColor(0,0,0,1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
