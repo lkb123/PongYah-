@@ -11,17 +11,17 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class AchievementScreen implements Screen {
 	
-	Texture fbImg ;
-	Texture twitterImg;
+	Texture fbTxt, twitterTxt;
 	Stage stage;
 	TextureAtlas atlas;
 	Skin skin;
@@ -30,14 +30,19 @@ public class AchievementScreen implements Screen {
 	Table table;
 	BitmapFont white;
 	BitmapFont black;
-	TextButton buttonFb, buttonTwitter;
+	Image fbImg, twitterImg;
+	Label highScore;
+	TextField highScoreText;
 	
 	@Override
 	public void show() {
 		stage = new Stage(new FitViewport(1280, 720));
 		Gdx.input.setInputProcessor(stage);
-		fbImg = new Texture("sharing/fb.jpg");
-		twitterImg = new Texture("sharing/twitter.jpg");
+		fbTxt = new Texture("sharing/fb.jpg");
+		twitterTxt = new Texture("sharing/twitter.jpg");
+		
+		fbImg = new Image(fbTxt);
+		twitterImg = new Image(twitterTxt);
 		
 		atlas = new TextureAtlas("ui/button.pack");
 		skin = new Skin(atlas);
@@ -52,6 +57,9 @@ public class AchievementScreen implements Screen {
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
 		
+		//highScore = new Label("High Score", skin);
+		//highScoreText = new TextField("0", skin);
+		
 		//creating buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = skin.getDrawable("button.up");
@@ -60,32 +68,33 @@ public class AchievementScreen implements Screen {
 		textButtonStyle.pressedOffsetY = -1;
 		textButtonStyle.font = black;
 
-		buttonFb = new TextButton("Facebook", textButtonStyle);
-		buttonFb.addListener(new ClickListener(){
+		fbImg.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.app.exit();
 			}
 			
 		});
-		buttonFb.pad(20);
 		
-		buttonTwitter = new TextButton("Twitter", textButtonStyle);
-		buttonTwitter.addListener(new ClickListener(){
+		//buttonTwitter = new TextButton("Twitter", textButtonStyle);
+		twitterImg.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
 				Gdx.app.exit();
 			}
 			
 		});
-		buttonTwitter.pad(20);
 		
+		//table.add(highScore);
+	    //table.add(highScoreText).width(100);
+	    //table.row();
 		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
 		table.row();
-		table.add(buttonFb).spaceBottom(20).minWidth(250);
+		table.add(fbImg).spaceBottom(20).minWidth(250);
 		table.row();
-		table.add(buttonTwitter).spaceBottom(20).minWidth(250);
+		table.add(twitterImg).spaceBottom(20).minWidth(250);
 		table.row();
+		//table.
 		
 		stage.addActor(table);
 		Gdx.input.setCatchBackKey(true);
@@ -131,8 +140,8 @@ public class AchievementScreen implements Screen {
 	@Override
 	public void dispose() {
 		stage.dispose();
-		fbImg.dispose();
-		twitterImg.dispose();
+		fbTxt.dispose();
+		twitterTxt.dispose();
 	}
 
 }

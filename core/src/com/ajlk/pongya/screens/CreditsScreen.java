@@ -52,6 +52,8 @@ public class CreditsScreen implements Screen {
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
 			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 		}
+		stage.act(delta);
+		stage.draw();
 	}
 
 	@Override
