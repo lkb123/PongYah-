@@ -71,7 +71,7 @@ public class MainMenu implements Screen {
 		buttonPlay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new GameScreen());
+				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGame());
 			}
 		});
 		buttonPlay.pad(20);
@@ -94,7 +94,7 @@ public class MainMenu implements Screen {
 		});
 		buttonCredits.pad(20);
 		
-		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
+		table.add(headingImage).spaceBottom(100).minWidth(800).minHeight(100);
 		table.row();
 		table.add(buttonPlay).spaceBottom(20).minWidth(250);
 		table.row();
