@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -32,7 +34,8 @@ public class AchievementScreen implements Screen {
 	BitmapFont black;
 	Image fbImg, twitterImg;
 	Label highScore;
-	TextField highScoreText;
+	//TextField highScoreText;
+	LabelStyle labelStyle;
 	
 	@Override
 	public void show() {
@@ -57,9 +60,6 @@ public class AchievementScreen implements Screen {
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
 		
-		//highScore = new Label("High Score", skin);
-		//highScoreText = new TextField("0", skin);
-		
 		//creating buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = skin.getDrawable("button.up");
@@ -71,31 +71,31 @@ public class AchievementScreen implements Screen {
 		fbImg.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
+				//Gdx.app.exit();
 			}
 			
 		});
 		
-		//buttonTwitter = new TextButton("Twitter", textButtonStyle);
 		twitterImg.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
+				//Gdx.app.exit();
 			}
 			
 		});
 		
-		//table.add(highScore);
-	    //table.add(highScoreText).width(100);
-	    //table.row();
+		labelStyle = new LabelStyle(white, Color.WHITE);
+		highScore = new Label("High Score: 0", labelStyle);
+		
 		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
+		table.row();
+		table.add(highScore).width(250);
 		table.row();
 		table.add(fbImg).spaceBottom(20).minWidth(250);
 		table.row();
 		table.add(twitterImg).spaceBottom(20).minWidth(250);
 		table.row();
-		//table.
-		
+				
 		stage.addActor(table);
 		Gdx.input.setCatchBackKey(true);
 	}
