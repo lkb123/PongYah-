@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -55,6 +56,7 @@ public class PongGame implements Screen, GestureListener {
 		stage.addActor(enemyPaddle);
 		
 		score = "100";
+		
 		bounds = white.getBounds(score);
 		white.scale(1.5f);
 		
@@ -82,6 +84,8 @@ public class PongGame implements Screen, GestureListener {
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 		
+		this.score = String.valueOf(getAcceY());
+		
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
 			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 		}
@@ -107,8 +111,15 @@ public class PongGame implements Screen, GestureListener {
 			else
 				ball.reverseVelocityX();
 		}
-			
 		
+		if(Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){
+			playerPaddle.updateYposition(getAcceY());
+		}
+		
+	}
+
+	private float getAcceY() {
+		return Gdx.input.getAccelerometerX();
 	}
 
 	@Override
@@ -174,7 +185,11 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		playerPaddle.updatePosition(deltaY);
+		if(Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){
+			//do nothing
+		}else
+			playerPaddle.updatePosition(deltaY);
+		
 		return true;
 	}
 
