@@ -66,11 +66,18 @@ public class Ball extends Actor{
 				ballVel.y = -ballVel.y;
 		}
 		if ((ballPos.x >= (viewport.getWorldWidth() - ballSprite.getWidth() - 17)) || (ballPos.x <= ballSprite.getHeight()/2 + 2)){
-			ballVel.x = -ballVel.x;
+			resetBall();
 		}
 		
 	}
 	
+	private void resetBall() {
+		ballPos.x = viewport.getWorldWidth()/2-ballSprite.getWidth()/2;
+		ballPos.y = viewport.getWorldHeight()/2+ballSprite.getHeight()/2;
+		ballVel= new Vector2(0,0);
+		
+	}
+
 	public void dispose(){
 		texture.dispose();
 	}
