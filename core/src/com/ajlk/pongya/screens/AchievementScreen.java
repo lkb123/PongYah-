@@ -91,9 +91,9 @@ public class AchievementScreen implements Screen {
 		table.row();
 		table.add(highScore).width(250);
 		table.row();
-		table.add(fbImg).spaceBottom(20).minWidth(250);
+		table.add(fbImg).spaceBottom(30).minWidth(100).minHeight(200);
 		table.row();
-		table.add(twitterImg).spaceBottom(20).minWidth(250);
+		table.add(twitterImg).spaceBottom(30).minWidth(100).minHeight(200);
 		table.row();
 				
 		stage.addActor(table);
