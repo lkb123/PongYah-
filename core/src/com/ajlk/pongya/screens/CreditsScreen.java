@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class CreditsScreen implements Screen {
 	
-	SpriteBatch batch = new SpriteBatch();
+	private SpriteBatch batch = new SpriteBatch();
 	private Stage stage = new Stage(new FitViewport(1600,900));
 	private BitmapFont white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 	private String heading;

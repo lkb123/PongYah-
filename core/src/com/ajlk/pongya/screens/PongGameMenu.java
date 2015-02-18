@@ -4,12 +4,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -17,38 +16,31 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
-public class MainMenu implements Screen {
+public class PongGameMenu implements Screen {
 	
 	private Stage stage;
 	private TextureAtlas atlas;
 	private Skin skin;
 	private Table table;
-	private TextButton buttonExit, buttonPlay, buttonAchievement, buttonCredits;
+	private TextButton playButtonAcce, playButtonSwipe;
 	private BitmapFont white,black;
-	private Texture headingTexture;
-	private Image headingImage;
-
+	
 	@Override
 	public void show() {
 		stage = new Stage(new FitViewport(1280, 720));
-
+		
 		Gdx.input.setInputProcessor(stage);
 		Gdx.input.setCatchBackKey(true);
 		
 		atlas = new TextureAtlas("ui/button.pack");
 		skin = new Skin(atlas);
 		
-		headingTexture =  new Texture("ui/heading.png");
-		headingImage = new Image(headingTexture);
-
-
 		table = new Table(skin);
 		table.setBounds(0, 0, stage.getWidth(), stage.getHeight());
 		
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
 		
-		//creating buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = skin.getDrawable("button.up");
 		textButtonStyle.down = skin.getDrawable("button.down");
@@ -56,57 +48,31 @@ public class MainMenu implements Screen {
 		textButtonStyle.pressedOffsetY = -1;
 		textButtonStyle.font = black;
 		
-		buttonExit = new TextButton("Exit", textButtonStyle);
-		buttonExit.addListener(new ClickListener(){
+		playButtonAcce = new TextButton("Tilt Mode", textButtonStyle);
+		playButtonAcce.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Gdx.app.exit();
+				boolean gameModeAcce = true;
+				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGame(gameModeAcce));
 			}
-			
 		});
-		buttonExit.pad(20);
+		playButtonAcce.pad(20);
 		
-		
-		buttonPlay = new TextButton("Play", textButtonStyle);
-		buttonPlay.addListener(new ClickListener(){
+		playButtonSwipe = new TextButton("Swipe Mode", textButtonStyle);
+		playButtonSwipe.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGameMenu());
+				boolean gameModeAcce = false;
+				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGame(gameModeAcce));
 			}
 		});
-		buttonPlay.pad(20);
+		playButtonSwipe.pad(20);
 		
-		buttonAchievement = new TextButton("Achievement", textButtonStyle);
-		buttonAchievement.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new AchievementScreen());
-			}
-		});
-		buttonAchievement.pad(20);
-		
-		buttonCredits = new TextButton("Credits", textButtonStyle);
-		buttonCredits.addListener(new ClickListener(){
-			@Override
-			public void clicked(InputEvent event, float x, float y) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new CreditsScreen());
-			}
-		});
-		buttonCredits.pad(20);
-		
-		table.add(headingImage).spaceBottom(100).minWidth(800).minHeight(100);
+		table.add(playButtonAcce).expandX().spaceBottom(20).minWidth(360);
 		table.row();
-		table.add(buttonPlay).spaceBottom(20).minWidth(250);
-		table.row();
-		table.add(buttonAchievement).expandX().spaceBottom(20).minWidth(250);
-		table.row();
-		table.add(buttonCredits).expandX().spaceBottom(20).minWidth(250);
-		table.row();
-		table.add(buttonExit).minWidth(250);
+		table.add(playButtonSwipe).expandX().spaceBottom(20).minWidth(360);
 		stage.addActor(table);
-		
-		
-		
+
 	}
 
 	@Override
@@ -118,25 +84,31 @@ public class MainMenu implements Screen {
 		
 		stage.act(delta);
 		stage.draw();
+
 	}
 
 	@Override
 	public void resize(int width, int height) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
 	public void pause() {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void resume() {
+		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void hide() {
 		this.dispose();
+
 	}
 
 	@Override

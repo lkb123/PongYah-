@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PongGame implements Screen, GestureListener {
 	
+	private boolean gameModeAcce;
 	private SpriteBatch batch = new SpriteBatch();
 	
 	final float GAMESCREEN_WIDTH = 1600;
@@ -42,6 +43,10 @@ public class PongGame implements Screen, GestureListener {
 	
 	Sprite background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
 
+
+	public PongGame(boolean gameMode) {
+		this.gameModeAcce = gameMode;
+	}
 
 	@Override
 	public void show() {
@@ -91,8 +96,8 @@ public class PongGame implements Screen, GestureListener {
 		}
 		
 		if(ball.getBoundingRectangle().overlaps(playerPaddle.getBoundingRectangle())){
-			if(playerPaddle.getBoundingRectangle().getY() >= ball.getBoundingRectangle().getY() ||
-					playerPaddle.getBoundingRectangle().getY()+playerPaddle.getHeight() <= ball.getBoundingRectangle().getY())
+			if(playerPaddle.getBoundingRectangle().getY() > ball.getBoundingRectangle().getY() ||
+					playerPaddle.getBoundingRectangle().getY()+playerPaddle.getHeight() < ball.getBoundingRectangle().getY())
 			{
 				ball.reverseVelocityX();
 				ball.reverseVelocityY();
@@ -112,7 +117,7 @@ public class PongGame implements Screen, GestureListener {
 				ball.reverseVelocityX();
 		}
 		
-		if(Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){
+		if(gameModeAcce){
 			playerPaddle.updateYposition(getAcceY());
 		}
 		
@@ -185,7 +190,7 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		if(Gdx.input.isPeripheralAvailable(Peripheral.Accelerometer)){
+		if(this.gameModeAcce){
 			//do nothing
 		}else
 			playerPaddle.updatePosition(deltaY);
