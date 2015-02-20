@@ -17,6 +17,8 @@ public class Ball extends Actor{
 	private Vector2 ballPos;
 	private Vector2 ballVel = new Vector2(0,0);
 	private Viewport viewport;
+	private Integer score = 0;
+	private boolean gameOver = false;
 
 	public Ball(Viewport viewport) {
 		this.viewport = viewport;
@@ -41,12 +43,30 @@ public class Ball extends Actor{
 		return ballVel.x;
 	}
 	
+	public Vector2 getBallPos(){
+		return this.ballPos;
+	}
+	
 	public void reverseVelocityX(){
-		this.ballVel.x = this.ballVel.x*-1;
+		if(ballVel.x <30 && ballVel.x >-30){
+			if(ballVel.x >0)
+				ballVel.x = (ballVel.x + 1) *-1;
+			else
+				ballVel.x = (ballVel.x -1) *-1;
+		}else
+			ballVel.x = ballVel.x  *-1;
+			
 	}
 	public void reverseVelocityY() {
-		this.ballVel.y = this.ballVel.y*-1;
+		if(ballVel.y <20 && ballVel.y >-20){
+			if(ballVel.y >0)
+				ballVel.y = (ballVel.y + 1) *-1;
+			else
+				ballVel.y = (ballVel.y -1) *-1;
+		}else
+			ballVel.y = ballVel.y  *-1;
 	}
+	
 	public void setBallVelocity(float x,float y){
 		this.ballVel = new Vector2(x, y);
 	}
@@ -55,6 +75,8 @@ public class Ball extends Actor{
 		this.ballPos = new Vector2(ballSprite.getX(),ballSprite.getY());
 		cornerCollisionChecker();
 		ballSprite.setPosition(ballPos.x+ballVel.x, ballPos.y+ballVel.y);
+		
+		System.out.println("X: "+ ballVel.x +" Y: "+ ballVel.y);
 	}
 
 	public  Rectangle getBoundingRectangle() {
@@ -62,15 +84,19 @@ public class Ball extends Actor{
 	}
 	
 	public void cornerCollisionChecker(){
-		if ((ballPos.y >= (viewport.getWorldHeight() - ballSprite.getHeight() -17)) || (ballPos.y <= ballSprite.getHeight()/2 +2)){
+		if ((ballPos.y >= (viewport.getWorldHeight() - ballSprite.getHeight() -17)) || (ballPos.y <= ballSprite.getHeight()/2 +2))
 				ballVel.y = -ballVel.y;
-		}
-		if ((ballPos.x >= (viewport.getWorldWidth() - ballSprite.getWidth() - 17)) || (ballPos.x <= ballSprite.getHeight()/2 + 2)){
+		if (ballPos.x <= 0){
 			resetBall();
+			score = score + 10;
 		}
-		
+		if (ballPos.x >= (viewport.getWorldWidth() - ballSprite.getWidth()))
+			gameOver = true;
 	}
 	
+	public boolean isGameOver(){
+		return gameOver;
+	}
 	private void resetBall() {
 		ballPos.x = viewport.getWorldWidth()/2-ballSprite.getWidth()/2;
 		ballPos.y = viewport.getWorldHeight()/2+ballSprite.getHeight()/2;
@@ -80,6 +106,10 @@ public class Ball extends Actor{
 
 	public void dispose(){
 		texture.dispose();
+	}
+
+	public Integer getScore() {
+		return this.score;
 	}
 
 
