@@ -23,6 +23,12 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class PongGame implements Screen, GestureListener {
 	
+	public final int GAME_READY = 0; 
+	public final int GAME_RUNNING = 1; 
+	public final int GAME_PAUSED = 2; 
+	public final int GAME_OVER = 4;
+	public int state;
+	
 	private boolean gameModeAcce;
 	private SpriteBatch batch = new SpriteBatch();
 	
@@ -39,13 +45,15 @@ public class PongGame implements Screen, GestureListener {
 	
 	private BitmapFont white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 	private BitmapFont.TextBounds bounds;
-	private String score;
+	private int scorePerPadde = 0;
+	private String score = "0";
 	
 	Sprite background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
 
 
 	public PongGame(boolean gameMode) {
 		this.gameModeAcce = gameMode;
+		this.state = this.GAME_READY;
 	}
 
 	@Override
@@ -60,8 +68,6 @@ public class PongGame implements Screen, GestureListener {
 		stage.addActor(playerPaddle);
 		stage.addActor(enemyPaddle);
 		
-		score = "100";
-		
 		bounds = white.getBounds(score);
 		white.scale(1.5f);
 		
@@ -73,28 +79,61 @@ public class PongGame implements Screen, GestureListener {
 	public void render(float delta) {
 		Gdx.gl.glClearColor(0,0,0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+		}
+		if(ball.isGameOver()){
+			state = GAME_OVER;
+		}
+		drawGame();
+		switch (state) {
+	    case GAME_READY:
+	        break;
+	    case GAME_RUNNING:
+	    	updateGame();
+	        break;
+	    case GAME_PAUSED:
+	        break;
+	    case GAME_OVER:
+	    	System.out.println("gameOver");
+	        break;
+	    }
+		
+	}
+
+	private void drawGame() {
 		stage.getCamera().update();
 		
 		batch.begin();
 		batch.setProjectionMatrix(camera.combined);
 		background.draw(batch);
+		
 		white.draw(batch, score, 
 				viewport.getWorldWidth()/2 - (bounds.width /2), 
 				viewport.getWorldHeight() - bounds.height);
 		batch.end();
 		
-		ball.update();
-		
 		stage.getBatch().setProjectionMatrix(camera.combined); 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
-		
-		this.score = String.valueOf(getAcceY());
-		
-		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+	}
+
+	private void updateGame() {
+		if(gameModeAcce){
+			playerPaddle.updateYposition(getAcceY());
 		}
 		
+		detectAndBallPaddleCollision();
+		ball.update();
+		
+		Vector2 pos = ball.getBallPos();
+		enemyPaddle.update(pos);
+		int totalScore = ball.getScore()+scorePerPadde;
+		this.score = String.valueOf(totalScore);
+	}
+
+	private void detectAndBallPaddleCollision() {
 		if(ball.getBoundingRectangle().overlaps(playerPaddle.getBoundingRectangle())){
 			if(playerPaddle.getBoundingRectangle().getY() > ball.getBoundingRectangle().getY() ||
 					playerPaddle.getBoundingRectangle().getY()+playerPaddle.getHeight() < ball.getBoundingRectangle().getY())
@@ -103,7 +142,9 @@ public class PongGame implements Screen, GestureListener {
 				ball.reverseVelocityY();
 			}
 			else
+				{
 				ball.reverseVelocityX();
+			}
 		}
 		
 		if(ball.getBoundingRectangle().overlaps(enemyPaddle.getBoundingRectangle())){
@@ -112,15 +153,13 @@ public class PongGame implements Screen, GestureListener {
 			{
 				ball.reverseVelocityX();
 				ball.reverseVelocityY();
+				scorePerPadde += 1;
 			}
-			else
+			else{
 				ball.reverseVelocityX();
+				scorePerPadde += 1;
+			}
 		}
-		
-		if(gameModeAcce){
-			playerPaddle.updateYposition(getAcceY());
-		}
-		
 	}
 
 	private float getAcceY() {
@@ -135,14 +174,12 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public void pause() {
-
-
+		this.state = GAME_PAUSED;
 	}
 
 	@Override
 	public void resume() {
-
-
+		this.state = GAME_RUNNING;
 	}
 
 	@Override
@@ -167,20 +204,26 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
+		
 		Vector3 pos = new Vector3(x,y,0);
 		camera.unproject(pos);
-		Random rand = new Random();
-		int[] posNeg = {1,-1};
-		if(ball.getBoundingRectangle().contains(pos.x,pos.y))
-			ball.setBallVelocity(10, rand.nextInt(20)*posNeg[rand.nextInt(2)]);
+		if(ball.getBoundingRectangle().contains(pos.x,pos.y)){
+			this.state = GAME_RUNNING;
+			initializeBallMovement();
+		}
 		return true;
 		
 	}
 
+	private void initializeBallMovement() {
+			Random rand = new Random();
+			int[] posNeg = {1,-1};
+			ball.setBallVelocity(10, rand.nextInt(20)*posNeg[rand.nextInt(2)]);
+	}
+
 	@Override
 	public boolean longPress(float x, float y) {
-		((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
-		return true;
+		return false;
 	}
 
 	@Override
@@ -190,9 +233,7 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		if(this.gameModeAcce){
-			//do nothing
-		}else
+		if(this.gameModeAcce == false && this.state == GAME_RUNNING)
 			playerPaddle.updatePosition(deltaY);
 		
 		return true;

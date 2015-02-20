@@ -2,6 +2,7 @@ package com.ajlk.pongya.screens;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -84,6 +85,10 @@ public class PongGameMenu implements Screen {
 		
 		stage.act(delta);
 		stage.draw();
+		
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+		}
 
 	}
 
@@ -95,7 +100,7 @@ public class PongGameMenu implements Screen {
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+
 
 	}
 

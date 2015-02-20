@@ -16,10 +16,6 @@ public class PlayerPaddle extends Actor{
 	private Texture texture = new Texture(Gdx.files.internal("ui/paddleRight.png"));
 	private Sprite playerSprite = new Sprite(texture);
 
-	private Vector2 playerPos;
-	private float defaultVel = 10;
-
-	
 	public PlayerPaddle(Viewport viewport) {
 		this.viewport = viewport;
 		this.setBounds(playerSprite.getX(), playerSprite.getY(), playerSprite.getWidth(), playerSprite.getHeight());
@@ -44,15 +40,14 @@ public class PlayerPaddle extends Actor{
 	}
 	
 	public void update(){
-		this.playerPos = new Vector2(playerSprite.getX(),playerSprite.getY());
-		playerSprite.setPosition(playerPos.x, playerPos.y + defaultVel);
-		
+
 	}
 	
 	public void dispose(){
 		texture.dispose();
 	}
-
+	
+	//PANNING
 	public void updatePosition(float y){
 			if(playerSprite.getY()<viewport.getWorldHeight()-playerSprite.getHeight()&& y<0)
 				playerSprite.setPosition(playerSprite.getX(), playerSprite.getY()+ (-y));
@@ -63,19 +58,22 @@ public class PlayerPaddle extends Actor{
 			if(playerSprite.getY()<5)
 				playerSprite.setPosition(viewport.getWorldWidth()-(playerSprite.getWidth() + 7), 0);
 	}
+	
+	//TILTING
+	public void updateYposition(float y) {
+		if(playerSprite.getY()<viewport.getWorldHeight()-playerSprite.getHeight()&& y<0)
+			playerSprite.setPosition(playerSprite.getX(), playerSprite.getY()+ (-y*5));
+		if(playerSprite.getY()>viewport.getWorldHeight()-playerSprite.getHeight())
+			playerSprite.setPosition(viewport.getWorldWidth()-(playerSprite.getWidth() + 7), viewport.getWorldHeight()-playerSprite.getHeight());
+		if(playerSprite.getY()>5 && y>0)
+			playerSprite.setPosition(playerSprite.getX(), playerSprite.getY()+ (-y*5));
+		if(playerSprite.getY()<5)
+			playerSprite.setPosition(viewport.getWorldWidth()-(playerSprite.getWidth() + 7), 0);	
+	}
 
 	public void setPosition(Vector2 position) {
 		this.playerSprite.setPosition(position.x - (playerSprite.getWidth() + 35), position.y/2 - playerSprite.getHeight()/2);
 	}
 
-	public void updateYposition(float y) {
-		if(playerSprite.getY()<viewport.getWorldHeight()-playerSprite.getHeight()&& y<0)
-			playerSprite.setPosition(playerSprite.getX(), playerSprite.getY()+ (-y*10));
-		if(playerSprite.getY()>viewport.getWorldHeight()-playerSprite.getHeight())
-			playerSprite.setPosition(viewport.getWorldWidth()-(playerSprite.getWidth() + 7), viewport.getWorldHeight()-playerSprite.getHeight());
-		if(playerSprite.getY()>5 && y>0)
-			playerSprite.setPosition(playerSprite.getX(), playerSprite.getY()+ (-y*10));
-		if(playerSprite.getY()<5)
-			playerSprite.setPosition(viewport.getWorldWidth()-(playerSprite.getWidth() + 7), 0);	
-	}
+
 }
