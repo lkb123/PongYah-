@@ -8,6 +8,6 @@ import static org.junit.Assert.*;
 public class BallTest {
 	@Test
 	public void sampleTest() {
-		assertEquals(0, 0);
+		assertEquals(4, 4);
 	}
 }
