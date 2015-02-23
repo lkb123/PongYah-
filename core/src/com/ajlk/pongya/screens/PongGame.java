@@ -5,7 +5,6 @@ import java.util.Random;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Input.Peripheral;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -54,6 +53,7 @@ public class PongGame implements Screen, GestureListener {
 	public PongGame(boolean gameMode) {
 		this.gameModeAcce = gameMode;
 		this.state = this.GAME_READY;
+		
 	}
 
 	@Override
@@ -71,6 +71,7 @@ public class PongGame implements Screen, GestureListener {
 		bounds = white.getBounds(score);
 		white.scale(1.5f);
 		
+		Gdx.input.setInputProcessor(stage);
 		Gdx.input.setInputProcessor(gestureDetector);
 		Gdx.input.setCatchBackKey(true);
 	}
@@ -81,25 +82,31 @@ public class PongGame implements Screen, GestureListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+			((Game)Gdx.app.getApplicationListener()).setScreen(new PongGameMenu());
 		}
 		if(ball.isGameOver()){
 			state = GAME_OVER;
 		}
-		drawGame();
+		
 		switch (state) {
 	    case GAME_READY:
+	    	drawGame();
 	        break;
 	    case GAME_RUNNING:
+	    	drawGame();
 	    	updateGame();
 	        break;
 	    case GAME_PAUSED:
 	        break;
 	    case GAME_OVER:
-	    	System.out.println("gameOver");
+	    	gameOver();
 	        break;
 	    }
 		
+	}
+
+	private void gameOver() {
+		((Game)Gdx.app.getApplicationListener()).setScreen(new GameOverScreen(this.gameModeAcce));
 	}
 
 	private void drawGame() {
