@@ -5,6 +5,7 @@ import java.util.Random;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -44,10 +45,16 @@ public class PongGame implements Screen, GestureListener {
 	
 	private BitmapFont white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 	private BitmapFont.TextBounds bounds;
-	private int scorePerPadde = 0;
+	private int scorePerPaddle = 0;
 	private String score = "0";
+	private Preferences highScores;
+	private int highScoreTilt;
+	private int highScoreSwipe;
+	private int currentPlayerScore;
 	
 	Sprite background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
+	
+	
 
 
 	public PongGame(boolean gameMode) {
@@ -74,6 +81,10 @@ public class PongGame implements Screen, GestureListener {
 		Gdx.input.setInputProcessor(stage);
 		Gdx.input.setInputProcessor(gestureDetector);
 		Gdx.input.setCatchBackKey(true);
+		
+		highScores = Gdx.app.getPreferences("highScores");
+		highScoreTilt = highScores.getInteger("tiltScore", 0);
+		highScoreSwipe = highScores.getInteger("swipeScore",0);
 	}
 
 	@Override
@@ -106,7 +117,27 @@ public class PongGame implements Screen, GestureListener {
 	}
 
 	private void gameOver() {
-		((Game)Gdx.app.getApplicationListener()).setScreen(new GameOverScreen(this.gameModeAcce));
+		boolean beatHighScore;
+		
+		if(gameModeAcce){
+			if(this.highScoreTilt > this.currentPlayerScore){
+				beatHighScore = false;
+			}else{
+				beatHighScore = true;
+				highScores.putInteger("tiltScore", currentPlayerScore);
+				highScores.flush();
+			}
+		}else{
+			if(this.highScoreSwipe > this.currentPlayerScore){
+				beatHighScore = false;
+			}else{
+				beatHighScore = true;
+				highScores.putInteger("swipeScore", currentPlayerScore);
+				highScores.flush();
+			}
+		}
+		
+		((Game)Gdx.app.getApplicationListener()).setScreen(new GameOverScreen(this.gameModeAcce,currentPlayerScore,beatHighScore));
 	}
 
 	private void drawGame() {
@@ -136,7 +167,8 @@ public class PongGame implements Screen, GestureListener {
 		
 		Vector2 pos = ball.getBallPos();
 		enemyPaddle.update(pos);
-		int totalScore = ball.getScore()+scorePerPadde;
+		int totalScore = ball.getScore()+scorePerPaddle;
+		this.currentPlayerScore = totalScore;
 		this.score = String.valueOf(totalScore);
 	}
 
@@ -160,11 +192,11 @@ public class PongGame implements Screen, GestureListener {
 			{
 				ball.reverseVelocityX();
 				ball.reverseVelocityY();
-				scorePerPadde += 1;
+				scorePerPaddle += 1;
 			}
 			else{
 				ball.reverseVelocityX();
-				scorePerPadde += 1;
+				scorePerPaddle += 1;
 			}
 		}
 	}
