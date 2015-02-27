@@ -52,7 +52,7 @@ public class PongGame implements Screen, GestureListener {
 	private int highScoreSwipe;
 	private int currentPlayerScore;
 	
-	Sprite background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
+	private Sprite background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
 	
 	
 
@@ -65,7 +65,9 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public void show() {
-
+		Assets.backgroundMusic.stop();
+		Assets.isPlayingBackgroundMusic = false;
+		
 		stage.getViewport().apply();
 		stage.getCamera().position.set(GAMESCREEN_WIDTH/2,GAMESCREEN_HEIGHT/2,0);
 		
@@ -92,9 +94,6 @@ public class PongGame implements Screen, GestureListener {
 		Gdx.gl.glClearColor(0,0,0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
-		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
-			((Game)Gdx.app.getApplicationListener()).setScreen(new PongGameMenu());
-		}
 		if(ball.isGameOver()){
 			state = GAME_OVER;
 		}
@@ -114,6 +113,9 @@ public class PongGame implements Screen, GestureListener {
 	        break;
 	    }
 		
+		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
+			((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+		}
 	}
 
 	private void gameOver() {
@@ -136,7 +138,6 @@ public class PongGame implements Screen, GestureListener {
 				highScores.flush();
 			}
 		}
-		
 		((Game)Gdx.app.getApplicationListener()).setScreen(new GameOverScreen(this.gameModeAcce,currentPlayerScore,beatHighScore));
 	}
 
@@ -174,6 +175,7 @@ public class PongGame implements Screen, GestureListener {
 
 	private void detectAndBallPaddleCollision() {
 		if(ball.getBoundingRectangle().overlaps(playerPaddle.getBoundingRectangle())){
+			Assets.paddle1.play();
 			if(playerPaddle.getBoundingRectangle().getY() > ball.getBoundingRectangle().getY() ||
 					playerPaddle.getBoundingRectangle().getY()+playerPaddle.getHeight() < ball.getBoundingRectangle().getY())
 			{
@@ -187,6 +189,7 @@ public class PongGame implements Screen, GestureListener {
 		}
 		
 		if(ball.getBoundingRectangle().overlaps(enemyPaddle.getBoundingRectangle())){
+			Assets.paddle2.play();
 			if(enemyPaddle.getBoundingRectangle().getY() >= ball.getBoundingRectangle().getY() ||
 					enemyPaddle.getBoundingRectangle().getY()+enemyPaddle.getHeight() <= ball.getBoundingRectangle().getY())
 			{
@@ -223,7 +226,7 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public void hide() {
-		this.dispose();
+		//this.dispose();
 	}
 
 	@Override
@@ -244,9 +247,7 @@ public class PongGame implements Screen, GestureListener {
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
 		
-		Vector3 pos = new Vector3(x,y,0);
-		camera.unproject(pos);
-		if(ball.getBoundingRectangle().contains(pos.x,pos.y)){
+		if(this.state == GAME_READY){
 			this.state = GAME_RUNNING;
 			initializeBallMovement();
 		}
@@ -257,7 +258,8 @@ public class PongGame implements Screen, GestureListener {
 	private void initializeBallMovement() {
 			Random rand = new Random();
 			int[] posNeg = {1,-1};
-			ball.setBallVelocity(10, rand.nextInt(20)*posNeg[rand.nextInt(2)]);
+			
+			ball.setBallVelocity(10, 5*posNeg[rand.nextInt(2)]);
 	}
 
 	@Override

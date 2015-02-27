@@ -26,10 +26,11 @@ public class PongGameMenu implements Screen {
 	private BitmapFont white,black;
 	
 	public PongGameMenu() {
-		Gdx.input.setCatchBackKey(false);
+		
 	}
 	@Override
 	public void show() {
+		
 		stage = new Stage(new FitViewport(1280, 720));
 		
 		Gdx.input.setInputProcessor(stage);
@@ -55,6 +56,7 @@ public class PongGameMenu implements Screen {
 		playButtonAcce.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
 				boolean gameModeAcce = true;
 				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGame(gameModeAcce));
 			}
@@ -65,6 +67,7 @@ public class PongGameMenu implements Screen {
 		playButtonSwipe.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
 				boolean gameModeAcce = false;
 				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGame(gameModeAcce));
 			}

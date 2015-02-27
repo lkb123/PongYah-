@@ -71,6 +71,7 @@ public class GameOverScreen implements Screen {
 		continueButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
 				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGame(gameModeAcce));
 			}
 		});
@@ -80,12 +81,14 @@ public class GameOverScreen implements Screen {
 		homeButton.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
 				((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
 			}
 		});
 		homeButton.pad(20);
 		
 		if(beatHighScore){
+			Assets.highScore.play();
 			message = "New High Score: " + playerScore;
 		}else{
 			message = "Your Score: " + playerScore;
@@ -93,13 +96,17 @@ public class GameOverScreen implements Screen {
 		
 		LabelStyle headingStyle = new LabelStyle(white,Color.WHITE);
 		heading = new Label(message,headingStyle);
-		heading.setScale(3);
 		
-		table.add(heading).center().spaceBottom(50);
-		table.row();
-		table.add(continueButton).minWidth(50).spaceRight(20);
-		table.add(homeButton).minWidth(50);
+
+		table.add(heading).center().spaceBottom(50).row();
+		table.add(continueButton).minWidth(50).spaceBottom(20).row();
+		table.add(homeButton).minWidth(50).row();
 		stage.addActor(table);
+		
+		if(!Assets.isPlayingBackgroundMusic){
+			Assets.backgroundMusic.loop();
+			Assets.isPlayingBackgroundMusic = true;
+		}
 
 	}
 
@@ -109,7 +116,6 @@ public class GameOverScreen implements Screen {
 		
 		stage.act(delta);
 		stage.draw();
-		
 		
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
