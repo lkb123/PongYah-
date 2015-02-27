@@ -42,7 +42,7 @@ public class EnemyPaddle extends Actor{
 		float deltaY = enemySprite.getY()- pos.y;
 		float x = enemySprite.getX();
 		
-		if(enemySprite.getY()<viewport.getWorldHeight()-enemySprite.getHeight()&& deltaY<0)
+		if(enemySprite.getY()<viewport.getWorldHeight()-enemySprite.getHeight() && deltaY<0)
 			enemySprite.setPosition(x, pos.y - enemySprite.getHeight()/2);
 		
 		if(enemySprite.getY()>viewport.getWorldHeight()-enemySprite.getHeight())

@@ -28,8 +28,10 @@ public class MainMenu implements Screen {
 	private Texture headingTexture;
 	private Image headingImage;
 
+	
 	@Override
 	public void show() {
+
 		stage = new Stage(new FitViewport(1280, 720));
 
 		Gdx.input.setInputProcessor(stage);
@@ -40,13 +42,15 @@ public class MainMenu implements Screen {
 		
 		headingTexture =  new Texture("ui/heading.png");
 		headingImage = new Image(headingTexture);
-
+		
 
 		table = new Table(skin);
 		table.setBounds(0, 0, stage.getWidth(), stage.getHeight());
 		
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
+		
+		
 		
 		//creating buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
@@ -56,10 +60,12 @@ public class MainMenu implements Screen {
 		textButtonStyle.pressedOffsetY = -1;
 		textButtonStyle.font = black;
 		
+		
 		buttonExit = new TextButton("Exit", textButtonStyle);
 		buttonExit.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.dispose();
 				Gdx.app.exit();
 			}
 			
@@ -71,6 +77,7 @@ public class MainMenu implements Screen {
 		buttonPlay.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
 				((Game)Gdx.app.getApplicationListener()).setScreen(new PongGameMenu());
 			}
 		});
@@ -80,6 +87,7 @@ public class MainMenu implements Screen {
 		buttonAchievement.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
 				((Game)Gdx.app.getApplicationListener()).setScreen(new AchievementScreen());
 			}
 		});
@@ -89,6 +97,7 @@ public class MainMenu implements Screen {
 		buttonCredits.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
 				((Game)Gdx.app.getApplicationListener()).setScreen(new CreditsScreen());
 			}
 		});
@@ -105,8 +114,10 @@ public class MainMenu implements Screen {
 		table.add(buttonExit).minWidth(250);
 		stage.addActor(table);
 		
-		
-		
+		if(!Assets.isPlayingBackgroundMusic){
+			Assets.backgroundMusic.loop();
+			Assets.isPlayingBackgroundMusic = true;
+		}
 	}
 
 	@Override

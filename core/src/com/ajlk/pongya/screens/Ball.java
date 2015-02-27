@@ -1,5 +1,7 @@
 package com.ajlk.pongya.screens;
 
+import java.util.Random;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -84,8 +86,11 @@ public class Ball extends Actor{
 	}
 	
 	public void cornerCollisionChecker(){
-		if ((ballPos.y >= (viewport.getWorldHeight() - ballSprite.getHeight() -17)) || (ballPos.y <= ballSprite.getHeight()/2 +2))
+		Random rand = new Random();
+		if ((ballPos.y >= (viewport.getWorldHeight() - ballSprite.getHeight() -17)) || (ballPos.y <= ballSprite.getHeight()/2 +2)){
 				ballVel.y = -ballVel.y;
+				Assets.table[rand.nextInt(2)].play();
+		}
 		if (ballPos.x <= 0){
 			resetBall();
 			score = score + 10;
