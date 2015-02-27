@@ -1,13 +1,13 @@
 package com.ajlk.pogya.tests;
 
-import org.junit.Ignore;
-import org.junit.Test;
+//import org.junit.Ignore;
+//import org.junit.Test;
 
-import static org.junit.Assert.*;
+//import static org.junit.Assert.*;
 
 public class BallTest {
-	@Test
+	//@Test
 	public void sampleTest() {
-		assertEquals(4, 4);
+		//assertEquals(4, 4);
 	}
 }

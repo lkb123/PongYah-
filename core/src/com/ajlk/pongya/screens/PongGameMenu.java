@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -26,6 +25,9 @@ public class PongGameMenu implements Screen {
 	private TextButton playButtonAcce, playButtonSwipe;
 	private BitmapFont white,black;
 	
+	public PongGameMenu() {
+		Gdx.input.setCatchBackKey(false);
+	}
 	@Override
 	public void show() {
 		stage = new Stage(new FitViewport(1280, 720));

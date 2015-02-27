@@ -90,13 +90,15 @@ public class Ball extends Actor{
 			resetBall();
 			score = score + 10;
 		}
-		if (ballPos.x >= (viewport.getWorldWidth() - ballSprite.getWidth()))
+		if (ballPos.x >= (viewport.getWorldWidth() - ballSprite.getWidth())){
 			gameOver = true;
+		}
 	}
 	
 	public boolean isGameOver(){
 		return gameOver;
 	}
+	
 	private void resetBall() {
 		ballPos.x = viewport.getWorldWidth()/2-ballSprite.getWidth()/2;
 		ballPos.y = viewport.getWorldHeight()/2+ballSprite.getHeight()/2;

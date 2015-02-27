@@ -3,6 +3,7 @@ package com.ajlk.pongya.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -36,6 +36,11 @@ public class AchievementScreen implements Screen {
 	Label highScore;
 	//TextField highScoreText;
 	LabelStyle labelStyle;
+	
+	private Preferences highScores;
+	private int highScoreTilt;
+	private int highScoreSwipe;
+	private Label highScore2;
 	
 	@Override
 	public void show() {
@@ -60,6 +65,7 @@ public class AchievementScreen implements Screen {
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
 		
+		/*
 		//creating buttons
 		TextButtonStyle textButtonStyle = new TextButtonStyle();
 		textButtonStyle.up = skin.getDrawable("button.up");
@@ -84,16 +90,25 @@ public class AchievementScreen implements Screen {
 			
 		});
 		
+		*/
+		
+		highScores = Gdx.app.getPreferences("highScores");
+		highScoreTilt = highScores.getInteger("tiltScore", 0);
+		highScoreSwipe = highScores.getInteger("swipeScore",0);
+		
+		
 		labelStyle = new LabelStyle(white, Color.WHITE);
-		highScore = new Label("High Score: 0", labelStyle);
+		highScore = new Label("Tilt High Score: " + highScoreTilt, labelStyle);
+		highScore.scaleBy(3);
+		highScore2 = new Label("Swipe High Score: " + highScoreSwipe, labelStyle);
+		highScore2.scaleBy(3);
 		
 		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
 		table.row();
-		table.add(highScore).width(250);
+		table.add(highScore).width(250).spaceBottom(50);
 		table.row();
-		table.add(fbImg).spaceBottom(30).minWidth(100).minHeight(200);
+		table.add(highScore2).width(250);
 		table.row();
-		table.add(twitterImg).spaceBottom(30).minWidth(100).minHeight(200);
 		table.row();
 				
 		stage.addActor(table);

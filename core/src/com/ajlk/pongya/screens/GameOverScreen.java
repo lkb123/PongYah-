@@ -4,12 +4,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -28,9 +31,17 @@ public class GameOverScreen implements Screen {
 	private TextButton continueButton;
 	private TextButton homeButton;
 	private boolean gameModeAcce;
+	private int playerScore;
+	private boolean beatHighScore;
+	private Label heading;
+	private String message;
 
-	public GameOverScreen(boolean gameModeAcce) {
+
+	public GameOverScreen(boolean gameModeAcce, int currentPlayerScore,
+			boolean beatHighScore) {
 		this.gameModeAcce = gameModeAcce;
+		this.playerScore = currentPlayerScore;
+		this.beatHighScore = beatHighScore;
 	}
 
 	@Override
@@ -73,7 +84,19 @@ public class GameOverScreen implements Screen {
 			}
 		});
 		homeButton.pad(20);
-
+		
+		if(beatHighScore){
+			message = "New High Score: " + playerScore;
+		}else{
+			message = "Your Score: " + playerScore;
+		}
+		
+		LabelStyle headingStyle = new LabelStyle(white,Color.WHITE);
+		heading = new Label(message,headingStyle);
+		heading.setScale(3);
+		
+		table.add(heading).center().spaceBottom(50);
+		table.row();
 		table.add(continueButton).minWidth(50).spaceRight(20);
 		table.add(homeButton).minWidth(50);
 		stage.addActor(table);
@@ -86,6 +109,8 @@ public class GameOverScreen implements Screen {
 		
 		stage.act(delta);
 		stage.draw();
+		
+		
 		
 		if (Gdx.input.isKeyPressed(Input.Keys.BACK)) {
 			((Game)Gdx.app.getApplicationListener()).setScreen(new PongGameMenu());
