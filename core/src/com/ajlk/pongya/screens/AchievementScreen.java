@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -41,6 +42,7 @@ public class AchievementScreen implements Screen {
 	private int highScoreTilt;
 	private int highScoreSwipe;
 	private Label highScore2;
+	private TextButton buttonBack;
 	
 	@Override
 	public void show() {
@@ -64,6 +66,22 @@ public class AchievementScreen implements Screen {
 		
 		white = new BitmapFont(Gdx.files.internal("font/white.fnt"),false);
 		black = new BitmapFont(Gdx.files.internal("font/black.fnt"),false);		
+		
+		TextButtonStyle textButtonStyle = new TextButtonStyle();
+		textButtonStyle.up = skin.getDrawable("button.up");
+		textButtonStyle.down = skin.getDrawable("button.down");
+		textButtonStyle.pressedOffsetX = 1;
+		textButtonStyle.pressedOffsetY = -1;
+		textButtonStyle.font = black;
+		
+		buttonBack = new TextButton("Back", textButtonStyle);
+		buttonBack.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
+				((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+			}
+		});
 		
 		/*
 		//creating buttons
@@ -107,8 +125,10 @@ public class AchievementScreen implements Screen {
 		table.row();
 		table.add(highScore).width(250).spaceBottom(50);
 		table.row();
-		table.add(highScore2).width(250);
+		table.add(highScore2).width(250).spaceBottom(150);
 		table.row();
+		table.row();
+		table.add(buttonBack).minWidth(250).minHeight(50);
 		table.row();
 				
 		stage.addActor(table);
