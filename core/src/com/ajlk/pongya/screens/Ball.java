@@ -44,7 +44,9 @@ public class Ball extends Actor{
 	public float getBallVelX(){
 		return ballVel.x;
 	}
-	
+	public float getBallVelY(){
+		return ballVel.y;
+	}
 	public Vector2 getBallPos(){
 		return this.ballPos;
 	}
@@ -77,8 +79,6 @@ public class Ball extends Actor{
 		this.ballPos = new Vector2(ballSprite.getX(),ballSprite.getY());
 		cornerCollisionChecker();
 		ballSprite.setPosition(ballPos.x+ballVel.x, ballPos.y+ballVel.y);
-		
-		System.out.println("X: "+ ballVel.x +" Y: "+ ballVel.y);
 	}
 
 	public  Rectangle getBoundingRectangle() {
@@ -91,11 +91,11 @@ public class Ball extends Actor{
 				ballVel.y = -ballVel.y;
 				Assets.table[rand.nextInt(2)].play();
 		}
-		if (ballPos.x <= 0){
+		if (ballPos.x <= 40){
 			resetBall();
 			score = score + 10;
 		}
-		if (ballPos.x >= (viewport.getWorldWidth() - ballSprite.getWidth())){
+		if (ballPos.x >= (viewport.getWorldWidth() - ballSprite.getWidth()) - 50){
 			gameOver = true;
 		}
 	}

@@ -106,6 +106,8 @@ public class GameOverScreen implements Screen {
 		if(!Assets.isPlayingBackgroundMusic){
 			Assets.backgroundMusic.loop();
 			Assets.isPlayingBackgroundMusic = true;
+		}else{
+			Assets.backgroundMusic.setVolume(Assets.backgroundMusicId, 1);
 		}
 
 	}

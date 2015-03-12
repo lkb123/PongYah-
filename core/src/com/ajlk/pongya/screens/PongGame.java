@@ -7,16 +7,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -53,6 +55,7 @@ public class PongGame implements Screen, GestureListener {
 	private int currentPlayerScore;
 	
 	private Sprite background = new Sprite(new Texture(Gdx.files.internal("ui/bg.png")));
+	private ShapeRenderer shapeRenderer = new ShapeRenderer();
 	
 	
 
@@ -65,8 +68,8 @@ public class PongGame implements Screen, GestureListener {
 
 	@Override
 	public void show() {
-		Assets.backgroundMusic.stop();
-		Assets.isPlayingBackgroundMusic = false;
+		Assets.loadGameSound();
+		Assets.backgroundMusic.setVolume(Assets.backgroundMusicId, (float) 0.3);
 		
 		stage.getViewport().apply();
 		stage.getCamera().position.set(GAMESCREEN_WIDTH/2,GAMESCREEN_HEIGHT/2,0);
@@ -97,6 +100,8 @@ public class PongGame implements Screen, GestureListener {
 		if(ball.isGameOver()){
 			state = GAME_OVER;
 		}
+		
+		
 		
 		switch (state) {
 	    case GAME_READY:
@@ -153,9 +158,17 @@ public class PongGame implements Screen, GestureListener {
 				viewport.getWorldHeight() - bounds.height);
 		batch.end();
 		
+		shapeRenderer.setProjectionMatrix(camera.combined);
+		shapeRenderer.begin(ShapeType.Line);
+		shapeRenderer.line(40, 0, 40, viewport.getWorldHeight(),Color.BLACK, Color.BLACK);
+		shapeRenderer.line(viewport.getWorldWidth() - 45, 0, viewport.getWorldWidth() - 45, viewport.getWorldHeight(),Color.BLACK, Color.BLACK);
+		shapeRenderer.end();
+		
 		stage.getBatch().setProjectionMatrix(camera.combined); 
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
+		
+		
 	}
 
 	private void updateGame() {
@@ -165,9 +178,9 @@ public class PongGame implements Screen, GestureListener {
 		
 		detectAndBallPaddleCollision();
 		ball.update();
-		
-		Vector2 pos = ball.getBallPos();
-		enemyPaddle.update(pos);
+		Vector2 currentPos = ball.getBallPos();
+		float currentVel = ball.getBallVelY();
+		enemyPaddle.update(currentVel,currentPos);
 		int totalScore = ball.getScore()+scorePerPaddle;
 		this.currentPlayerScore = totalScore;
 		this.score = String.valueOf(totalScore);

@@ -24,6 +24,9 @@ public class EnemyPaddle extends Actor{
 		
 	}
 	
+	public float getYPosition(){
+		return enemySprite.getY();
+	}
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
 		enemySprite.draw(batch);
@@ -38,23 +41,29 @@ public class EnemyPaddle extends Actor{
 		return enemySprite.getBoundingRectangle();
 	}
 	
-	public void update(Vector2 pos){
-		float deltaY = enemySprite.getY()- pos.y;
-		float x = enemySprite.getX();
+	public void update(float currentVel, Vector2 currentPos ){
 		
-		if(enemySprite.getY()<viewport.getWorldHeight()-enemySprite.getHeight() && deltaY<0)
-			enemySprite.setPosition(x, pos.y - enemySprite.getHeight()/2);
+		float x = enemySprite.getX();
+		boolean canUpdate;
+		
+		if((currentPos.y - enemySprite.getHeight()/2) < (viewport.getWorldHeight()-enemySprite.getHeight()))
+			canUpdate = true;
+		else
+			canUpdate = false;
+		
+		if(enemySprite.getY()<viewport.getWorldHeight()-enemySprite.getHeight() && currentVel > 0)
+			enemySprite.setPosition(x, currentPos.y - enemySprite.getHeight()/2);
 		
 		if(enemySprite.getY()>viewport.getWorldHeight()-enemySprite.getHeight())
-			enemySprite.setPosition(5, viewport.getWorldHeight()-enemySprite.getHeight());
+			enemySprite.setPosition(x, viewport.getWorldHeight()- enemySprite.getHeight() );
 		
+
 		
+		if(enemySprite.getY()>5 && currentVel < 0  && canUpdate)
+			enemySprite.setPosition(x, currentPos.y - enemySprite.getHeight()/2);
 		
-		if(enemySprite.getY()>5 && deltaY>0)
-			enemySprite.setPosition(x, pos.y - enemySprite.getHeight()/2);
-		
-		if(enemySprite.getY()<5)
-			enemySprite.setPosition(5, 0);
+		if(enemySprite.getY()<5 )
+			enemySprite.setPosition(x, 0);
 	}
 
 	public void setPosition(Vector2 position) {

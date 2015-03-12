@@ -40,7 +40,7 @@ public class Splash implements Screen{
 		
 		Tween.set(splash, SpriteAccessor.ALPHA).target(0).start(tweenManager);
 		Tween.to(splash, SpriteAccessor.ALPHA, 2).target(1).repeatYoyo(1, (float) 0.5).setCallback(goToMainMenu).start(tweenManager);
-		
+			
 	}
 
 	@Override

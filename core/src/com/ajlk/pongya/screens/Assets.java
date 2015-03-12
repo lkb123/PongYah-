@@ -12,18 +12,23 @@ public class Assets {
 	public static Sound backgroundMusic;
 	public static Sound highScore;
 	
-	public static boolean isPlayingBackgroundMusic = false;
+	public static boolean isPlayingBackgroundMusic;
+	
+	public static long backgroundMusicId;
 	
 	public static void load(){
-		paddle1 = Gdx.audio.newSound(Gdx.files.internal("sounds/paddleSound1.mp3"));
-		paddle2 = Gdx.audio.newSound(Gdx.files.internal("sounds/paddleSound2.mp3"));
-		table[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/tableSound1.mp3"));
-		table[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/tableSound2.mp3"));
+		isPlayingBackgroundMusic = false;
 		buttonPressed = Gdx.audio.newSound(Gdx.files.internal("sounds/buttonSound.wav"));
 		backgroundMusic =  Gdx.audio.newSound(Gdx.files.internal("sounds/backgroundMusic.wav"));
 		highScore =  Gdx.audio.newSound(Gdx.files.internal("sounds/highScore.wav"));
 	}
 
+	public static void loadGameSound(){
+		paddle1 = Gdx.audio.newSound(Gdx.files.internal("sounds/paddleSound1.mp3"));
+		paddle2 = Gdx.audio.newSound(Gdx.files.internal("sounds/paddleSound2.mp3"));
+		table[0] = Gdx.audio.newSound(Gdx.files.internal("sounds/tableSound1.mp3"));
+		table[1] = Gdx.audio.newSound(Gdx.files.internal("sounds/tableSound2.mp3"));
+	}
 	public static void dispose() {
 		paddle1.dispose();
 		paddle2.dispose();

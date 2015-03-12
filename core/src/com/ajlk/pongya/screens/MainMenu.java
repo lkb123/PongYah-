@@ -115,7 +115,7 @@ public class MainMenu implements Screen {
 		stage.addActor(table);
 		
 		if(!Assets.isPlayingBackgroundMusic){
-			Assets.backgroundMusic.loop();
+			Assets.backgroundMusicId = Assets.backgroundMusic.loop();
 			Assets.isPlayingBackgroundMusic = true;
 		}
 	}
