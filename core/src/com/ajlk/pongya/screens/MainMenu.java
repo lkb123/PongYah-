@@ -65,7 +65,6 @@ public class MainMenu implements Screen {
 		buttonExit.addListener(new ClickListener(){
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				Assets.dispose();
 				Gdx.app.exit();
 			}
 			
