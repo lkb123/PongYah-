@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
@@ -120,6 +121,7 @@ public class AchievementScreen implements Screen {
 		highScore.scaleBy(3);
 		highScore2 = new Label("Swipe High Score: " + highScoreSwipe, labelStyle);
 		highScore2.scaleBy(3);
+		
 		
 		table.add(headingImage).spaceBottom(100).minWidth(700).minHeight(100);
 		table.row();

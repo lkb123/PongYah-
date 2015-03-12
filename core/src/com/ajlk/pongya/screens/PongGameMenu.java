@@ -22,7 +22,7 @@ public class PongGameMenu implements Screen {
 	private TextureAtlas atlas;
 	private Skin skin;
 	private Table table;
-	private TextButton playButtonAcce, playButtonSwipe;
+	private TextButton playButtonAcce, playButtonSwipe, buttonBack;
 	private BitmapFont white,black;
 	
 	public PongGameMenu() {
@@ -74,9 +74,22 @@ public class PongGameMenu implements Screen {
 		});
 		playButtonSwipe.pad(20);
 		
+		buttonBack = new TextButton("Back", textButtonStyle);
+		buttonBack.addListener(new ClickListener(){
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				Assets.buttonPressed.play();
+				((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenu());
+			}
+		});
+		buttonBack.pad(20);
+		
 		table.add(playButtonAcce).expandX().spaceBottom(20).minWidth(360);
 		table.row();
 		table.add(playButtonSwipe).expandX().spaceBottom(20).minWidth(360);
+		table.row();
+		table.row();
+		table.add(buttonBack).expandX().minWidth(360);
 		stage.addActor(table);
 
 	}
